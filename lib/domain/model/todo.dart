@@ -13,5 +13,6 @@ class Todo with _$Todo {
     @Default(false) bool complated,
   }) = _Todo;
 
+
   factory Todo.fromJson(Map<String, Object?> json) => _$TodoFromJson(json);
 }

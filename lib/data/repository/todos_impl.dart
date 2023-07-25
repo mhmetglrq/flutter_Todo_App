@@ -20,9 +20,9 @@ class TodosRepositoryImpl extends TodosRepository {
   }
 
   @override
-  Future<void> deleteTodo(Todo todo) async {
+  Future<void> deleteTodo(String id) async {
     final todos = await loadTodos();
-    final newTodos = todos.values.where((t) => t.id == todo.id).toList();
+    final newTodos = todos.values.where((t) => t.id == id).toList();
     await files.write(path, jsonEncode(Todos(values: newTodos).toJson()));
   }
 
@@ -42,8 +42,22 @@ class TodosRepositoryImpl extends TodosRepository {
   @override
   Future<void> saveTodo(Todo todo) async {
     final todos = await loadTodos();
-    final newTodos = todos.values.where((t) => t.id == todo.id).toList();
-    newTodos.add(todo);
-    await files.write(path, jsonEncode(Todos(values: newTodos).toJson()));
+
+    final existing =
+        todos.values.firstWhereOrNull((element) => element.id == todo.id);
+    if (existing != null) {
+      final newTodo = existing.copyWith(
+          id: todo.id,
+          title: todo.title,
+          description: todo.description,
+          complated: todo.complated);
+      final newTodos =
+          todos.values.map((e) => e.id == todo.id ? newTodo : e).toList();
+      await files.write(path, jsonEncode(Todos(values: newTodos).toJson()));
+      return;
+    } else {
+      final newTodos = [...todos.values, todo];
+      await files.write(path, jsonEncode(Todos(values: newTodos).toJson()));
+    }
   }
 }
