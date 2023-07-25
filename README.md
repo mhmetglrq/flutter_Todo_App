@@ -18,7 +18,7 @@
 
 ![Screen Shot](images/feature_img.png)
 
-A news application developed using Flutter. Application follows the Clean Architecture principles and it coding with the Riverpod state management.
+A todo application developed using Flutter. Application follows the Clean Architecture principles and it coding with the Riverpod state management.
 
 ## Built With
 
